@@ -1,23 +1,28 @@
 <?php session_start(); ?>
 <?php
    $host="localhost"; // Host name 
-   $username="saidur_saidur2"; // Mysql username
-   $password="yeamin99"; // Mysql password  
-   $db_name="saidur_onlineexam"; // Database name
+   $username="root"; // Mysql username
+   $password=""; // Mysql password  
+   $db_name="online_exam"; // Database name
    $tbl_name="student"; // Table name 
    
 // Connect to server and select databse.
-  mysql_connect("$host", "$username", "$password")or die("cannot   connect"); 
-  mysql_select_db("$db_name")or die("cannot select DB");
+    $con=mysqli_connect($host, $username, $password,$db_name)or die("cannot   connect");
+
+	if (mysqli_connect_errno())
+	{
+		echo "Failed to connect to MySQL: " . mysqli_connect_error();
+	}
   
-// username and password sent from here 
+  // username and password sent from here 
   $myusername=$_POST['id']; 
   $mypassword=$_POST['pass']; 
-
+  
   $sql="select * from $tbl_name where name='$myusername' and password='$mypassword'";
-  $result=mysql_query($sql);
-  $count=mysql_num_rows($result);
-  $row=mysql_fetch_array($result);
+  $result=mysqli_query($con,$sql);
+  $count=mysqli_num_rows($result);
+
+  $row=mysqli_fetch_array($result,MYSQLI_ASSOC);
 // If result matched $myusername and $mypassword, table row must be 1 row
 
   if($count==1 && $row['appeared']==0)

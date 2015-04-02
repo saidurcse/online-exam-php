@@ -136,21 +136,15 @@ A:hover {color: #C0FFC0; background-color: lightslategray; text-decoration: none
      
    <?php
       
-   $con = mysql_connect("localhost","saidur_saidur2","yeamin99");
-   if (!$con)
-    {
-      die('Could not connect: ' . mysql_error());
-    }
-   mysql_select_db("saidur_onlineexam", $con);
-   mysql_query("delete from examdetails");
-			   																											               
-	
-	
-			   
+    include("config.php");
+    
+    $sql = "delete from examdetails";
+    $result = mysqli_query($con,$sql);
+    																										               
+
+    echo "Exam password has been deleted from main database";
   
-  echo "Exam password has been deleted from main database";
-  
-  mysql_close($con);
+    mysqli_close($con);
 ?>
     
     

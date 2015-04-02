@@ -144,19 +144,22 @@ A:hover {color: #C0FFC0; background-color: lightslategray; text-decoration: none
    $randomNumber = rand(1, 1000000);
    //print $randomNumber; 
    
-   $con = mysql_connect("localhost","saidur_saidur2","yeamin99");
-   if (!$con)
-    {
-      die('Could not connect: ' . mysql_error());
-    }
-   mysql_select_db("saidur_onlineexam", $con);
-   mysql_query("insert into examdetails
-			   (`examdetails_id`,`admin_id`,`epassword`)
-			   values
-			   ('1','1','$randomNumber')																													               ");
-	
-	$result=mysql_query("select epassword from examdetails");
-	while($row = mysql_fetch_array($result))
+include("config.php");
+
+//Retrieving data from dtabases
+$sql1 = "insert into examdetails(`examdetails_id`,`admin_id`,`epassword`) values ('1','1','$randomNumber')";
+$result = mysqli_query($con,$sql1);
+
+
+$sql = "select epassword from examdetails";
+$result = mysqli_query($con,$sql);
+
+if (!$result) {
+    printf("Error: %s\n", mysqli_error($con));
+    exit();
+}
+
+	while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
 	{
 		echo $row['epassword'];
 	}
@@ -167,7 +170,7 @@ A:hover {color: #C0FFC0; background-color: lightslategray; text-decoration: none
   echo "This exam password is successfully added for exam purpose in the main server database and this password will be used in main exam announced by the administrator";
   echo "<br/>";
   echo "<br/>";
-  mysql_close($con);
+  mysqli_close($con);
 ?>
     
     

@@ -13,10 +13,10 @@
         session_destroy();
 		
         // Logged out, return home.
-        if(!session_is_registered($_SESSION['admin_id']))
-		{
+        //if(!session_is_registered($_SESSION['admin_id']))
+		//{
          header("location:adminlogin.php");
-        }
+        //}
 
 		
 ?>

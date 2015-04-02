@@ -137,14 +137,13 @@ A:hover {color: #C0FFC0; background-color: lightslategray; text-decoration: none
   <br/>
     <?php
 	
-	$con = mysql_connect("localhost","saidur_saidur2","yeamin99");
-    if (!$con)
-    {
-      die('Could not connect: ' . mysql_error());
-    }
-    mysql_select_db("saidur_onlineexam", $con);
-	$result = mysql_query("select question_id from question");
-	while($row = mysql_fetch_array($result))
+    include("config.php");	
+
+    //Retrieving data from dtabases
+    $sql = "select question_id from question";
+    $result = mysqli_query($con,$sql);
+
+	while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
   {
   ?>
      

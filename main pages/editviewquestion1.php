@@ -133,22 +133,21 @@ A:hover {color: #C0FFC0; background-color: lightslategray; text-decoration: none
   <div id="mainContent">
     <?php
 	
-	$con = mysql_connect("localhost","saidur_saidur2","yeamin99");
-    if (!$con)
-    {
-      die('Could not connect: ' . mysql_error());
-    }
-    mysql_select_db("saidur_onlineexam", $con);
-	
-	
-	
-	
+    include("config.php");
 	
 	//Retrieving data from dtabases
 	$qid=$_GET["question_id"];
-$result = mysql_query("select * from question where question_id=".$qid);
+    $sql = "select * from question where question_id=".$qid;
+    $result = mysqli_query($con,$sql);
 
-while($row = mysql_fetch_array($result))
+    if (!$result) {
+        printf("Error: %s\n", mysqli_error($con));
+        exit();
+    }
+
+    //$result = mysql_query("select * from question where question_id=".$qid);
+
+while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
   {
 ?>
    <form id="form1" name="form1" method="post" action="editviewquestion2.php">

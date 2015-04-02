@@ -13,10 +13,10 @@
         session_destroy();
 		
         // Logged out, return home.
-        if(!session_is_registered($_SESSION['name']))
-		{
+        //if(!session_is_registered($_SESSION['name']))
+		//{
          header("location:studentlogin.php");
-        }
+       // }
 		
 
 		

@@ -134,17 +134,12 @@ A:hover {color: #C0FFC0; background-color: lightslategray; text-decoration: none
   <div id="mainContent">
     <h1>Student View Account</h1>
     <?php
+include("config.php");
 
-$con = mysql_connect("localhost","saidur_saidur2","yeamin99");
-if (!$con)
-  {
-  die('Could not connect: ' . mysql_error());
-  }
 echo "<h4>List all student registered for Exam</h4>";
 
-mysql_select_db("saidur_onlineexam", $con);
-
-$result = mysql_query("select * from student");
+$sql = "select * from student";
+$result = mysqli_query($con,$sql);
 
 echo "<table  border='1'>
 <tr>
@@ -159,7 +154,7 @@ echo "<table  border='1'>
 
 </tr>";
 
-while($row = mysql_fetch_array($result))
+while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
   {
   echo "<tr>";
   echo "<td>" . $row['student_id'] . "</td>";
@@ -173,7 +168,7 @@ while($row = mysql_fetch_array($result))
   echo "</tr>";
   }
 echo "</table>";
-mysql_close($con);
+mysqli_close($con);
 
 ?>
    

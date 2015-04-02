@@ -149,23 +149,21 @@ $femail=$_POST["e-mail"];
 $fpassword = rand(1, 10000);
 
 
-$con = mysql_connect("localhost","saidur_saidur2","yeamin99");
-if (!$con)
-  {
-  die('Could not connect: ' . mysql_error());
-  }
-mysql_select_db("saidur_onlineexam", $con);
-
-mysql_query("insert into student
-			(`student_id`,`student_name`,`name`, `age`,`sadd`, `e-mail`, `password`) values
-								 ('$fsid','$fsname','$fname','$fage','$fsadd',																					  '$femail','$fpassword')
-																																	 ");
+include("config.php");
+$sql1 = "insert into student(`student_id`,`student_name`,`name`, `age`,`sadd`, `e-mail`, `password`) values 
+                            ('$fsid','$fsname','$fname','$fage','$fsadd','$femail','$fpassword')";
+$result1 = mysqli_query($con,$sql1);
+																																	
 
 echo "Your record successfully added";
 
-mysql_select_db("online_exam", $con);
+$sql = "select * from student";
+$result = mysqli_query($con,$sql);
 
-$result = mysql_query("select * from student");
+if (!$result) {
+    printf("Error: %s\n", mysqli_error($con));
+    exit();
+}
 
 echo "<table  border='1'>
 <tr>
@@ -176,10 +174,9 @@ echo "<table  border='1'>
 <th>Sh.Address</th>
 <th>E-mail</th>
 <th>Password</th>
-
 </tr>";
 
-while($row = mysql_fetch_array($result))
+while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
   {
   echo "<tr>";
   echo "<td>" . $row['student_id'] . "</td>";
@@ -193,7 +190,7 @@ while($row = mysql_fetch_array($result))
   }
 echo "</table>";
 
-mysql_close($con);
+mysqli_close($con);
 
 ?>
 

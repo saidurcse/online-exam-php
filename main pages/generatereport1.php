@@ -136,14 +136,19 @@ A:hover {color: #C0FFC0; background-color: lightslategray; text-decoration: none
     <?php
 
 
-$con = mysql_connect("localhost","saidur_saidur2","yeamin99");
-if (!$con)
-  {
-  die('Could not connect: ' . mysql_error());
-  }
-mysql_select_db("saidur_onlineexam", $con);
+include("config.php");
+
 //Retrieving data from dtabases
-$result = mysql_query("select * from student");
+$sql = "select * from student";
+$result = mysqli_query($con,$sql);
+
+
+if (!$result) {
+    printf("Error: %s\n", mysqli_error($con));
+    exit();
+}
+
+
 echo "<h4>List all of student for sending Certificate or Reports</h4>";
 echo "<table  border='1'>
 <tr>
@@ -158,7 +163,7 @@ echo "<table  border='1'>
 <th>Result</th>
 </tr>";
 
-while($row = mysql_fetch_array($result))
+while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
   {
   echo "<tr>";
   echo "<td>" . $row['student_id'] . "</td>";
@@ -173,7 +178,7 @@ while($row = mysql_fetch_array($result))
   }
 echo "</table>";
 
-mysql_close($con);
+mysqli_close($con);
 
 ?>
 

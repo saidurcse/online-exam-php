@@ -18,19 +18,17 @@ $fans2=$_POST["answer2"];
 $fans3=$_POST["answer3"];
 $fans4=$_POST["answer4"];
 $fcoption=$_POST["correct_option"];
-$con = mysql_connect("localhost","saidur_saidur2","yeamin99");
-if (!$con)
-  {
-  die('Could not connect: ' . mysql_error());
-  }
-mysql_select_db("saidur_onlineexam", $con);
-
-mysql_query("update question set level_id=$flid,question_set=$fqset ,question='$fques' ,answer1='$fans1' ,answer2='$fans2', answer3='$fans3' ,answer4='$fans4' ,correct_option='$fcoption'  where question_id=$question_id");
-
+     
+include("config.php");
+    
+$sql1 = "update question set level_id=$flid,question_set=$fqset ,question='$fques' ,answer1='$fans1' ,answer2='$fans2', answer3='$fans3' ,answer4='$fans4' ,correct_option='$fcoption'  where question_id=$question_id";
+$result1 = mysqli_query($con,$sql1);
 
  }
-//Retrieving data from dtabases
-$result = mysql_query("select * from question");
+
+    //Retrieving data from dtabases
+    $sql = "select * from question";
+    $result = mysqli_query($con,$sql);
 echo "<table  border='1'>
 <tr>
 <th>Q.ID</th>
@@ -46,7 +44,7 @@ echo "<table  border='1'>
 
 </tr>";
 
-while($row = mysql_fetch_array($result))
+while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
   {
   echo "<tr>";
   echo "<td>" . $row['question_id'] . "</td>";
@@ -63,7 +61,7 @@ while($row = mysql_fetch_array($result))
   }
 echo "</table>";
 
-mysql_close($con);
+mysqli_close($con);
 echo "<br/>";
 echo "<br/>";
 echo "<br/>";

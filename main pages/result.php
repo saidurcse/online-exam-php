@@ -10,6 +10,7 @@ else
 
  header("location:studentlogin.php"); 
 
+//include("config.php");
 $student_id= $_SESSION['student_id'];
  ?>
 
@@ -119,15 +120,11 @@ A:hover {color: #C0FFC0; background-color: lightslategray; text-decoration: none
   
   <?php
 
-      $con = mysql_connect("localhost","saidur_saidur2","yeamin99");
-         if (!$con)
-             {
-                die('Could not connect: ' . mysql_error());
-             }
-         mysql_select_db("saidur_onlineexam", $con);
-					   
-		$result1=mysql_query("select result from student where student_id='$student_id' ");
-		while($row = mysql_fetch_array($result1))
+      include("config.php");
+
+      $sql = "select result from student where student_id='$student_id' ";     
+      $result = mysqli_query($con,$sql);
+		while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
              {        
 			    echo "<br/>";
 				echo "<br/>";
@@ -141,7 +138,10 @@ A:hover {color: #C0FFC0; background-color: lightslategray; text-decoration: none
 				else
 				    echo "<h4>Status:</h4>   Fail";
 	       	 }
-	    mysql_query("update student set appeared=1 where student_id='$student_id'");	
+        $sql1 = "update student set appeared=1 where student_id='$student_id'";
+        $result1 = mysqli_query($con,$sql1);
+
+	    mysqli_close($con);
    
    ?>
  

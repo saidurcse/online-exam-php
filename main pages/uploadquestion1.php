@@ -134,7 +134,6 @@ A:hover {color: #C0FFC0; background-color: lightslategray; text-decoration: none
     <?php
 		
 $fqid=$_POST["question_id"];
-
 $fques=$_POST["question"];
 $fans1=$_POST["answer1"];
 $fans2=$_POST["answer2"];
@@ -142,21 +141,22 @@ $fans3=$_POST["answer3"];
 $fans4=$_POST["answer4"];
 $fcoption=$_POST["correct_option"];
 
-$con = mysql_connect("localhost","saidur_saidur2","yeamin99");
-if (!$con)
-  {
-  die('Could not connect: ' . mysql_error());
-  }
-mysql_select_db("saidur_onlineexam", $con);
+include("config.php");
 
-mysql_query("insert into question
-			(`question_id`,`question`,`answer1`, `answer2`, `answer3`,`answer4`,`correct_option`) values
-								 ('$fqid','$fques','$fans1','$fans2',																					  '$fans3','$fans4','$fcoption')
-																																	 ");
+
+$sql = "insert into question(`question_id`,`question`,`answer1`, `answer2`,`answer3`,`answer4`,`correct_option`) values ('$fqid','$fques','$fans1','$fans2','$fans3','$fans4','$fcoption')";
+$result = mysqli_query($con,$sql);
 
 
 //Retrieving data from dtabases
-$result = mysql_query("select * from question");
+$sql1 = "select * from question";
+$result1 = mysqli_query($con,$sql1);
+
+
+if (!$result1) {
+    printf("Error: %s\n", mysqli_error($con));
+    exit();
+}
 echo "<table  border='1'>
 <tr>
 <th>Q.ID</th>
@@ -170,7 +170,7 @@ echo "<table  border='1'>
 
 </tr>";
 
-while($row = mysql_fetch_array($result))
+while($row = mysqli_fetch_array($result1,MYSQLI_ASSOC))
   {
   echo "<tr>";
   echo "<td>" . $row['question_id'] . "</td>";
@@ -185,7 +185,7 @@ while($row = mysql_fetch_array($result))
   }
 echo "</table>";
 
-mysql_close($con);
+mysqli_close($con);
 echo "<br/>";
 echo "<br/>";
 echo "<br/>";

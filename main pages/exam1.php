@@ -1,6 +1,8 @@
 <?php
 
 session_start();
+
+ob_start();
   
 if(isset($_SESSION['name']))
 
@@ -65,7 +67,7 @@ if (min == 0 && sec == 0) {
 alert("Your session has timed out.");
 window.location.href = timedouturl;
 }
-else down = setTimeout("Down()", 1000);
+else down = setTimeout("Down()", 100);
 }
 function timeIt() {
 min = 1 * Minutes(document.form1.clock.value);
@@ -220,11 +222,14 @@ A:hover {
     <div id="submit">
       <input type="submit" name="submitPaper" value="Submit" />
     </div>
-    <div id="#third">
+    <div id="third">
       <table width="740" height="383" border="1" cellpadding="2">
         <tr>
           <!--<td height="140"><h4>Question: <?php //echo ($_POST['questionNumber']+1);?> </h4>-->
           <?php
+            
+           include("config.php");
+              
 		  if (!isset($_POST['questionNumber']))
 			$_POST['questionNumber'] = '-1';
 	  	$questionNumber=$_POST['questionNumber'];
@@ -239,43 +244,34 @@ A:hover {
 			 {
 				$optionChoose=$_POST['option'];
 				
-				$con = mysql_connect("localhost","saidur_saidur2","yeamin99");
-                if (!$con)
-                   {
-                    die('Could not connect: ' . mysql_error());
-                   }
-                mysql_select_db("saidur_onlineexam", $con);
-
-				$result2 = mysql_query("SELECT correct_option FROM `question` limit $questionNumber,1");
-				$row = mysql_fetch_array($result2); 
+                include("config.php");
+                
+                $sql2 = "SELECT correct_option FROM `question` limit $questionNumber,1";
+                $result2 = mysqli_query($con,$sql2);
+				//$result2 = mysql_query("SELECT correct_option FROM `question` limit $questionNumber,1");
+				$row = mysqli_fetch_array($result2,MYSQLI_ASSOC); 
 					 
 				   $correctOption = $row['correct_option'];
 				   				  
-				    $marks=0;
-				    if($optionChoose==$correctOption)
-					  $marks=1;
-				    else 
-				      $marks=0;
+                    $marks=0;
+                    if($optionChoose==$correctOption)
+                      $marks=1;
+                    else 
+                      $marks=0;				
 				
-			
-				$con = mysql_connect("localhost","saidur_saidur2","yeamin99");
-                 if (!$con)
-                       {
-                        die('Could not connect: ' . mysql_error());
-                        }
-                       mysql_select_db("saidur_onlineexam", $con);
-                       $studentId=$_SESSION['student_id'];
-			           $result1=mysql_query("select result from student where student_id='$studentId' ");
-					   while($row = mysql_fetch_array($result1))
-                       {                        
-                        	$marks=$marks+$row['result'] ;
-							//echo "MARKS="+$marks;	
-					   mysql_query("update student set result = $marks  where student_id='$studentId' ");																													
+                   $studentId=$_SESSION['student_id'];
+                   $sql1 = "select result from student where student_id='$studentId' ";
+                   $result1 = mysqli_query($con,$sql1);
+                   //$result1=mysql_query("select result from student where student_id='$studentId' ");
+                   while($row = mysqli_fetch_array($result1,MYSQLI_ASSOC))
+                   {                        
+                        $marks=$marks+$row['result'] ;
+                        //echo "MARKS="+$marks;	
+                        $sql4 = "update student set result = $marks  where student_id='$studentId' ";
+                        $result4 = mysqli_query($con,$sql4);
+                        //mysqli_query($con,"update student set result = $marks  where student_id='$studentId' ");																													
 
-						}
-
-
-				
+                    }				
 				//echo "OPTION CHOOSED was $optionChoose";
 			 }
 		}
@@ -287,24 +283,18 @@ A:hover {
 		
 		$questionNumber=$questionNumber+1;
 		
-		if($questionNumber>=10)
+		if($questionNumber>=2)
 			header("location:result.php");
 			
 			
 		$displayNumber=	$questionNumber+1;
 		echo "<td height='140'> <h4> Question:   {$displayNumber} </h4> ";
 			
-		$con = mysql_connect("localhost","saidur_saidur2","yeamin99");
-         if (!$con)
-         {
-            die('Could not connect: ' . mysql_error());
-         }
-         mysql_select_db("saidur_onlineexam", $con);
-		 
-		 $result = mysql_query("SELECT * FROM `question` limit $questionNumber,1 ");
+        $sql = "SELECT * FROM `question` limit $questionNumber,1 ";        
+        $result = mysqli_query($con,$sql);
 		 
 		 //Retrieving data from dtabases
-        while($row = mysql_fetch_array($result))
+        while($row = mysqli_fetch_array($result,MYSQLI_ASSOC))
         { 
 		
           echo $row['question']; 
@@ -339,10 +329,11 @@ A:hover {
         </tr>
       </table>
     </div>
-    <div id="#fourth">
+    <div id="fourth">
       <?php
 		// I do not want the question number 
 		echo "<input type='hidden' name='questionNumber' value='$questionNumber' />";
+            mysqli_close($con);
 	  ?>
       <label>
         <input type="submit" name="next" id="next" value="NextQuestion" />
